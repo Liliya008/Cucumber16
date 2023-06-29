@@ -2,6 +2,7 @@ package com.test.weborder.stepdefinitions;
 
 import com.test.weborder.pages.FoodOrderPage;
 import com.test.weborder.pages.WebOrderLoginPage;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.WebDriver;
@@ -12,20 +13,40 @@ public class FoodOrderStepDef {
     WebDriver driver= DriverHelper.getDriver();
     WebOrderLoginPage webOrderLoginPage=new WebOrderLoginPage(driver);
     FoodOrderPage foodOrderPage=new FoodOrderPage(driver);
-    @When("User logged in,click the order box,next button,provide inviteNote {string},inviteList {string}")
-    public void user_logged_in_click_the_order_box_next_button_provide_invite_note_invite_list(String inviteNote,String inviteList) throws InterruptedException {
-       webOrderLoginPage.login(ConfigReader.readProperty("QA_weborder_username"),ConfigReader.readProperty("QA_weborder_password"));
-       foodOrderPage.orderDetails(inviteNote,inviteList);
-    }
-    @Then("User choose the delivery option \\(My House) and validate the address {string}")
-    public void user_choose_the_delivery_option_my_house_and_validate_the_address(String expectedAddress) {
-       foodOrderPage.validateOrderAddress(expectedAddress);
-    }
-    @Then("User click order button,validate the header {string},description {string}")
-    public void user_click_order_button_validate_the_header_description(String expectedHeader, String expectedDescription) throws InterruptedException {
-       foodOrderPage.validateHeaderAndDescription(expectedHeader,expectedDescription);
+
+    @Given("User provides username and password")
+    public void user_provides_username_and_password() {
+        webOrderLoginPage.login(ConfigReader.readProperty("QA_weborder_username"),ConfigReader.readProperty("QA_weborder_password"));
     }
 
+    @When("User clicks Group Order Box and Next Button")
+    public void user_clicks_group_order_box_and_next_button() {
+       foodOrderPage.clickGroupOrderBox();
+       foodOrderPage.clickNextButton();
+    }
 
+    @When("User provides note {string} to invitees box")
+    public void user_provides_note_to_invitees_box(String message) throws InterruptedException {
+        foodOrderPage.sendInviteesMessage(message);
+    }
+
+    @When("User provides gmail {string},{string} to InviteList")
+    public void user_provides_gmail_to_invite_list(String email1, String email2) throws InterruptedException {
+        foodOrderPage.sendInviteList(email1, email2);
+    }
+
+    @When("User chooses the location {string} and validates the address {string}")
+    public void user_chooses_the_location_and_validates_the_address(String expectedLocation, String expectedAddress) {
+        foodOrderPage.validateOrderAddress(expectedLocation, expectedAddress);
+    }
+    @When("User clicks Create Group OrderButton")
+    public void user_clicks_create_group_order_button() throws InterruptedException {
+        foodOrderPage.clickCreateGroupOrderButton();
+
+    }
+    @Then("User validates the {string} and {string} from description")
+    public void user_validates_the_and_from_description(String string, String string2) {
+
+    }
 
 }

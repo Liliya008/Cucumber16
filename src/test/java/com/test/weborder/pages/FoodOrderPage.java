@@ -12,6 +12,8 @@ public class FoodOrderPage {
     public FoodOrderPage(WebDriver driver){
         PageFactory.initElements(driver,this);
     }
+    @FindBy(css = "#ConfirmAddressID")
+    WebElement chooseOrderLocation;
     @FindBy(xpath = "//label[@class='custom-control-label']")
     WebElement groupOrderButton;
     @FindBy(css = "#getAddressNextButton")
@@ -27,27 +29,43 @@ public class FoodOrderPage {
     @FindBy(css = "#createGroupOrder")
     WebElement createOrderButton;
     @FindBy(css = ".topBannerHeader")
-    WebElement header;
-    @FindBy(xpath = "//p[contains(text(),'Your group order is now pending')]")
+    WebElement foodOrderHeader;
+    @FindBy(xpath = "//p[contains(text(),'now pending')]")
     WebElement description;
 
-    public void orderDetails(String inviteNote,String inviteList) throws InterruptedException {
+
+
+    public void clickGroupOrderBox(){
+        if (groupOrderButton.isDisplayed())
         groupOrderButton.click();
+    }
+    public void clickNextButton(){
         nextButton.click();
-        this.inviteNote.sendKeys(inviteNote);
-        this.inviteList.sendKeys(inviteList);
     }
 
-public void validateOrderAddress(String expectedAddress){
-        Select select=new Select(location);
-        select.getFirstSelectedOption();
-        Assert.assertTrue(BrowserUtils.getText(address).contains(expectedAddress));
 
-}
+    public void sendInviteesMessage(String note) throws InterruptedException {
+        Thread.sleep(2000);
+        this.inviteNote.sendKeys(note);
+
+    }
+
+    public void sendInviteList(String email1, String email2) throws InterruptedException {
+        Thread.sleep(2000);
+        this.inviteList.sendKeys(email1+","+email2);
+    }
+
+    public void validateOrderAddress(String location,String expectedAddress) {
+        BrowserUtils.selectBy(this.location,location,"text");
+        Assert.assertTrue(BrowserUtils.getText(address).contains(expectedAddress));
+    }
+
+    public void clickCreateGroupOrderButton() throws InterruptedException {
+        createOrderButton.click();
+
+    }
         public void validateHeaderAndDescription(String expectedHeader,String expectedDescription) throws InterruptedException {
-            createOrderButton.click();
-            Thread.sleep(2000);
-            Assert.assertEquals(expectedHeader, BrowserUtils.getText(header));
+            Assert.assertEquals(expectedHeader, BrowserUtils.getText(foodOrderHeader));
             Assert.assertTrue(BrowserUtils.getText(description).contains(expectedDescription));
         }
 }

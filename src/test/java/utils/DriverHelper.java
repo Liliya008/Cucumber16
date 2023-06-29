@@ -8,6 +8,8 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.time.Duration;
+
 public class DriverHelper {
     private static WebDriver driver;
 
@@ -39,7 +41,7 @@ public class DriverHelper {
                     break;
             }
             driver.manage().window().maximize();
-            // driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
             driver.manage().deleteAllCookies();
         }
         return driver;
